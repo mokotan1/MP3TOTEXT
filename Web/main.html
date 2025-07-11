@@ -50,6 +50,109 @@
     </div>
   </div>
 </nav>
+  <!-- 메인 -->
+     <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f9fc;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #222;
+    }
+    p {
+      color: #555;
+    }
+    .upload-box {
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      padding: 40px;
+      background-color: white;
+      margin: 30px auto;
+      width: 60%;
+      max-width: 600px;
+    }
+    .upload-box input {
+      display: none;
+    }
+    .upload-label {
+      display: block;
+      font-size: 1rem;
+      color: #444;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .convert-btn {
+      background-color: #007bff;
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .features {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+    .feature {
+      width: 200px;
+      margin-bottom: 20px;
+    }
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  
+  <h1>음성에서 텍스트로, 쉽고 빠르게 변환하세요!</h1>
+  <p>MP3 파일을 업로드하면 자동으로 텍스트로 변환해드립니다.</p>
+
+  <form id="uploadForm" class="upload-box">
+    <label for="mp3file" class="upload-label">🎵 MP3 파일을 여기에 업로드하세요</label>
+    
+    <br><br>
+    <button type="submit" class="convert-btn">텍스트로 변환하기</button>
+  </form>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🎧</div>
+      <strong>MP3 업로드</strong>
+      <p>음성 파일 업로드만 하면 끝</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📝</div>
+      <strong>자동 음성 인식</strong>
+      <p>AI가 음성을 텍스트로 변환</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">💾</div>
+      <strong>텍스트 다운로드</strong>
+      <p>txt, 한글, PDF 파일로 저장 가능</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const fileInput = document.getElementById('mp3file');
+      if (fileInput.files.length === 0) {
+        alert('MP3 파일을 업로드해주세요.');
+        return;
+      }
+
+      // 백엔드 기능 추가 부분
+      alert("파일이 업로드되었고, 텍스트로 변환 중입니다.\n(백엔드 기능을 넣어야 함)");
+    });
+  </script>
+
 
   <!-- 푸터 -->
   <footer class="bg-dark text-white text-center p-4 mt-5">

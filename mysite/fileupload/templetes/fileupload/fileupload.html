@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            File Upload - MP3 to Text
+        </title>
+        /*드래그 앤 드롭 영역 스타일*/
+        <style>
+            #drop-zone{
+                border: 2px dashed #ccc;
+                padding: 50px;
+                text-align:center;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            #drop-zone.dragover{
+                background-color: #f0f0f0;
+            }
+            .hidden-file-input {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>File Upload - MP3 to Text</h1>
+
+        <form method = "post" action = "" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div id ="drop-zone">
+                <input type ="file" name="file" id="file-input" class="hidden-file-input">
+            </div>
+            <div id="file-list">
+                <p>선택된 파일이 없습니다.</p>
+            </div>
+            {{form.description.label_tag}}
+            {{form.description}}
+
+             <button type="submit">Upload</button>
+         </form>
+
+        <hr>
+        <h2>Uploaded Files</h2>
+        <ul>
+            {% for upload_file in upload_files %}
+            <li> 
+                {{ upload_file.description }}
+                <a href = "{{ upload_file.file.url}}" target = "blank"> {{ upload_file.file.name }} </a>
+                ({{ upload_file.uploaded_file_at|date:"Y-m-d H:i:s" }})
+            </li>
+            {% endfor %}
+        </ul>
+
+    <script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const fileListDisplay = document.getElementById('file-list');
+    
+    // 폼 및 description 필드 참조
+    const uploadForm = document.querySelector('form');
+    const descriptionInput = document.getElementById('id_description');
+
+    //선택된 파일을 목록을 화면에 표시
+    function updateFileList(files){
+        // 'fileListDisplay'가 null이 아닌지 확인 (이전 오류 방지)
+        if (!fileListDisplay) return; 
+        
+        fileListDisplay.innerHTML = '';
+        if (files.length === 0)
+        {
+            fileListDisplay.innerHTML = '<p> 선택된 파일이 없습니다!</p>';
+        }
+        else 
+        {
+            const list = document.createElement('ul');
+            for(let i = 0; i < files.length; i++)
+            {
+                const listItem = document.createElement('li');
+                //파일 이름과 표시
+                listItem.textContent = files[i].name + '(' + (files[i].size/1024 / 1024).toFixed(2) + 'MB';
+                list.appendChild(listItem);
+            }
+            fileListDisplay.appendChild(list);
+        }
+    }
+
+    //드레그 앤 드롭 영역 클릭 시 파일 선택 창 열기
+    dropZone.addEventListener('click', () => {
+        fileInput.click();
+    }); 
+
+    //파일 선택시 (클릭 또는 드래그 앤 드롭 후 input 파일에 추가 되었을 경우)
+    fileInput.addEventListener('change', (event) =>{
+        updateFileList(event.target.files);
+        console.log(event.target.files);
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (event)=>{
+            event.preventDefault();
+            event.stopPropagation();
+            dropZone.classList.add('dragover');
+        });
+    });
+
+    //드래그 종료시 스타일 복구
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (event)=>{
+            event.preventDefault();
+            event.stopPropagation();
+            dropZone.classList.remove('dragover');
+        });
+    });
+
+    //파일 드롭 처리
+    dropZone.addEventListener('drop',(event) =>{
+        const dt = event.dataTransfer.files;
+        //드롭된 파일을 숨겨진 input 요소의 files 리스트에 할당
+        fileInput.files = dt; 
+        updateFileList(dt);
+
+        console.log(dt);
+    });
+    
+    // 'Upload' 버튼 클릭 (폼 제출) 시 이벤트 처리
+    // 이 이벤트 리스너 함수 내부에 FormData와 Fetch API 코드가 위치해야 합니다.
+    uploadForm.addEventListener('submit', async (event) => {
+        event.preventDefault(); // 폼의 기본 제출 동작 방지
+        
+        // 폼 제출 시점에 FormData를 생성 (이 위치에 있어야 함)
+        const formData = new FormData();
+        
+        // fileInput에서 파일 데이터를 가져와 formData에 추가
+        if(fileInput.files.length > 0) {
+            for(let i = 0; i < fileInput.files.length; i++) {
+                formData.append('file', fileInput.files[i]); 
+            }
+        } 
+
+        // description 필드값 추가
+        if (descriptionInput) {
+            formData.append('description', descriptionInput.value);
+        }
+
+        // CSRF토큰 추가
+        const csrf_token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        formData.append('csrfmiddlewaretoken', csrf_token);
+
+        // Fetch api를 이용하여 서버로 데이터 전송
+        try {
+            const response = await fetch(uploadForm.action, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if(response.ok) {
+                alert('파일 업로드 성공');
+                location.reload();
+            } else {
+                alert('파일 업로드 실패');
+            }
+        } catch(error) {
+            console.error('Error:', error);
+            alert('파일 업로드 중 오류가 발생했습니다.');
+        }
+    });
+</script>
+    </body>
+</html>

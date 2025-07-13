@@ -11,16 +11,21 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# 업로드된 파일을 저장하는 물리적 경로
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#업로드 된 파일에 접근할 url
+MEDIA_URL = '/media/'
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$+3q4$8h@_$i3nmw(si@k467ws_%vl@a=bs7wm-33$=^yejuuc'
+SECRET_KEY = 'django-insecure-i!!qu9*cxzw5mrte=e+(_@ai*d3_v$l6_agc7$8bzvew76@v(g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'fileupload',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +60,9 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ 
+            BASE_DIR / 'fileupload' / 'templetes' 
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

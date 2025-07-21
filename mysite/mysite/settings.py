@@ -16,9 +16,9 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # 업로드된 파일을 저장하는 물리적 경로
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'MEDIA')
 #업로드 된 파일에 접근할 url
-MEDIA_URL = '/media/'
+MEDIA_URL = '/MEDIA/'
 
 
 # Quick-start development settings - unsuitable for production
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fileupload',
+    'rest_framework'
     'accounts',
 ]
 

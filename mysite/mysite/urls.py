@@ -22,8 +22,7 @@ from fileupload.views import upload_file
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', upload_file, name='main'),
-    path('accounts/', include('accounts.urls')),
+    path('fileupload/', include('fileupload.urls'))
 ]
 
 if settings.DEBUG:

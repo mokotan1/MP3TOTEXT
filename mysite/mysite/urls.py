@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from fileupload.views import upload_file 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('fileupload/', include('fileupload.urls'))
+    path('', upload_file, name='main'),
+    path('accounts/', include('accounts.urls')),
 ]
 
 if settings.DEBUG:

@@ -18,13 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from fileupload import views 
+from fileupload import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('fileupload.urls')),
     path('main/', views.upload_file, name='main'),
-    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('accounts/', include('myusers.urls')),
 ]
 
 if settings.DEBUG:

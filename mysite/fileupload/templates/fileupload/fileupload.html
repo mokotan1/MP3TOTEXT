@@ -1,9 +1,7 @@
-@ -1,12 +1,13 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <title>MP3 To CHAR</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,52 +11,25 @@
     <style>
         .carousel-inner img {
             width: 100%;
-@ -17,42 +18,8 @@
+            height: 500px;
+            object-fit: cover;
+        }
+        .dropdown-menu a:hover {
             background-color: #f8f9fa;
             color: #000;
         }
-  </style>
-</head>
-<body>
-
-<!-- 상단 네비게이션 바 -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'main' %}"><img src="" alt="Logo" width="100" height="50"></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-            메뉴
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href=""></a></li>
-            <li><a class="dropdown-item" href=""></a></li>
-            <li><a class="dropdown-item" href=""></a></li>
-          </ul>
-        </li>
-      </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-light" type="submit">검색</button>
-      </form>
-      <button class="btn btn-outline-light ms-3" onclick="location.href='{% url 'accounts:login' %}'">로그인</button>
-      <button class="btn btn-outline-light ms-2" onclick="location.href='{% url 'accounts:signup' %}'">회원가입</button>
-
-    </div>
-  </div>
-</nav>
-  <!-- 메인 -->
-     <style>
         /* 폰트 관련 CSS는 global.css로 옮겨지므로 이 부분은 삭제하거나 주석 처리 */
         /*
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #f7f9fc;
-@ -66,6 +33,7 @@
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #222;
+        }
         p {
             color: #555;
         }
@@ -66,7 +37,56 @@
         .upload-box {
             border: 2px dashed #ccc;
             border-radius: 10px;
-@ -122,14 +90,45 @@
+            padding: 40px;
+            background-color: white;
+            margin: 30px auto;
+            width: 60%;
+            max-width: 600px;
+        }
+        .upload-box input {
+            display: none;
+        }
+        .upload-label {
+            display: block;
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .convert-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        .feature {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        #drop-zone{
+            border: 2px dashed #ccc;
+            padding: 50px;
+            text-align:center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #drop-zone.dragover{
+            background-color: #8f6666;
+        }
+        .hidden-file-input {
             display: none;
         }
     </style>
@@ -75,7 +95,6 @@
 
 </head>
 <body>
-  
     {% block content %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -109,33 +128,93 @@
     <p>MP3 파일을 업로드하면 자동으로 텍스트로 변환해드립니다.</p>
     <div id ="drop-zone">
         <input type ="file" name="file" id="file-input" class="hidden-file-input" multiple accept="audio/*">
-                드래그 앤 드롭   /    클릭
         드래그 앤 드롭   /    클릭
     </div>
     </form> 
 
-@ -154,8 +153,7 @@
+    <div class="features">
+        <div class="feature">
+            <div class="feature-icon">🎧</div>
+            <strong>MP3 업로드</strong>
+            <p>음성 파일 업로드만 하면 끝</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">📝</div>
+            <strong>자동 음성 인식</strong>
+            <p>AI가 음성을 텍스트로 변환</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">💾</div>
+            <strong>텍스트 다운로드</strong>
+            <p>txt, 한글, PDF 파일로 저장 가능</p>
+        </div>
+    </div>
+
     <script>
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
-    const fileListDisplay = document.getElementById('file-list');
-    
         const fileListDisplay = document.getElementById('file-list'); // HTML에 file-list 요소가 없음, 필요없으면 삭제
 
         //드레그 앤 드롭 영역 클릭 시 파일 선택 창 열기
         dropZone.addEventListener('click', () => {
-@ -211,112 +209,29 @@
+            fileInput.click();
+        }); 
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (event)=>{
+                event.preventDefault();
+                event.stopPropagation();
+                dropZone.classList.add('dragover');
+            });
+        });
+
+        //드래그 종료시 스타일 복구
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (event)=>{
+                event.preventDefault();
+                event.stopPropagation();
+                dropZone.classList.remove('dragover');
+            });
+        });
+
+        //파일 드롭 처리
+        dropZone.addEventListener('drop',(event) =>{
+            const files = event.dataTransfer.files;
+            let selectedFile = null;
+            //드롭된 파일을 숨겨진 input 요소의 files 리스트에 할당
+            if(files.length === 0)
+            {
+                alert('파일을 선택해 주세요');
+                return;
+            }
+
+            for(const file of files)
+            {
+                if(file.type === 'audio/mpeg' || file.type === 'audio/wav')
+                {
+                    selectedFile = file;
+                    break;
+                }
+            }
+
+            if (selectedFile == null)
+            {
+                alert("오디오 파일을 넣어 주세요");
+                return;
+            }
+
+            const dataTransfer = new DataTransfer();
+
+            dataTransfer.items.add(selectedFile);
         
             fileInput.files = dataTransfer.files;
 
-        console.log('선택된 파일', selectedFile);
-        updateFileToServer(selectedFile);
+            updateFileToServer(selectedFile);
 
             console.log(files);
         });
 
-    //fatch api
-    async function updateFileToServer(selectedFile) 
+        async function updateFileToServer(selectedFile) 
     {
       const formData = new FormData();
       formData.append('file', selectedFile);
@@ -209,42 +288,38 @@
       return cookieValue;
     }
 
-
     </script>
 
 
-  <!-- 푸터 -->
     <footer class="bg-dark text-white text-center p-4 mt-5">
         <div class="container">
             <div class="row">
-        <!-- 정보 -->
                 <div class="col-md-4">
                     <h5>정보</h5>
                     <p></p>
                     <p></p>
                     <p></p>
                 </div>
-        <!-- 빠른 링크 -->
                 <div class="col-md-4">
                     <h5>빠른 링크</h5>
                     <ul class="list-unstyled">
                         <li><a href="{% url 'main' %}" class="text-white text-decoration-none">홈</a></li>
-            <li><a href="{% url 'accounts:login' %}" class="text-white text-decoration-none">로그인</a></li>
-            <li><a href="{% url 'accounts:signup' %}" class="text-white text-decoration-none">회원가입</a></li>
                         <li><a href="{% url 'myusers:login' %}" class="text-white text-decoration-none">로그인</a></li>
                         <li><a href="{% url 'myusers:signup' %}" class="text-white text-decoration-none">회원가입</a></li>
                         <li><a href="#" class="text-white text-decoration-none">고객 센터</a></li>
                     </ul>
                 </div>
-        <!-- 소셜 미디어 -->
                 <div class="col-md-4">
                     <h5>팔로우하기</h5>
                     <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i> Facebook</a><br>
-@ -328,7 +243,7 @@
+                    <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i> Twitter</a><br>
+                    <a href="#" class="text-white"><i class="bi bi-instagram"></i> Instagram</a>
+                </div>
+            </div>
+            <hr class="border-light">
             <p class="mb-0"></p>
         </div>
     </footer>
-
     {% endblock %}
     
 </body>

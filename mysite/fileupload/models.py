@@ -1,4 +1,5 @@
 from django.db import models
+import whisper
 
 # 모델 정의 시작
 
@@ -7,6 +8,8 @@ class fileupload(models.Model):
     file = models.FileField(upload_to='uploads/')
     description = models.CharField(max_length = 255, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    transcirbed_txt = models.TextField(null= True, blank= True)
+
 
 
     def __str__(self):

@@ -4,12 +4,28 @@ from .models import fileupload
 from django.conf import settings
 from rest_framework import viewsets
 from .serializers import FileSerializer
+from .utils import get_whisper_model
 
 
 
 class FileViewSet(viewsets.ModelViewSet):
-    queryset = fileupload.objects.all()
     serializer_class = FileSerializer
+
+    def perform_create(self, serializer):
+
+        serializer.save()
+        file_path = serializer.instance.file.path
+
+        whisper_model = get_whisper_model()
+
+        return_txt = whisper_model.transcribe(file_path, language = 'ko')
+
+        serializer.instance.transcirbed_txt = return_txt['text']
+
+        serializer.save()
+
+    
+
 
 
 def upload_file(request):

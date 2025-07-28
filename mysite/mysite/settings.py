@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import openai
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,15 @@ SECRET_KEY = 'django-insecure-i!!qu9*cxzw5mrte=e+(_@ai*d3_v$l6_agc7$8bzvew76@v(g
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+#--WHISPER 설정
+WHISPER_MODEL_SIZE = 'medium'
+
+AVAILABLE_WHISPER_LANGUAGE = ['ko', 'en', 'ja']
+WHISPER_LANGUAGE = 'ko'
+
+
+WHISPER_DEVICE = 'cpu'
 
 
 # Application definition

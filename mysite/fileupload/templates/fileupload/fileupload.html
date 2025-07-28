@@ -153,11 +153,51 @@
     <script>
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
-        const fileListDisplay = document.getElementById('file-list'); // HTML에 file-list 요소가 없음, 필요없으면 삭제
-
+        // 파일 업로드 여부를 확인하는 플래그
+        let isfileUpload = false;
         //드레그 앤 드롭 영역 클릭 시 파일 선택 창 열기
-        dropZone.addEventListener('click', () => {
+        dropZone.addEventListener('click', (event) => {
             fileInput.click();
+        }); 
+        dropZone.addEventListener('change', (event)=>{
+            const files = event.target.files
+            let selectedFile = null;
+            //드롭된 파일을 숨겨진 input 요소의 files 리스트에 할당
+            if(files.length === 0)
+            {
+                alert('파일을 선택해 주세요');
+                return;
+            }
+
+            for(const file of files)
+            {
+                if(file.type === 'audio/mpeg' || file.type === 'audio/wav')
+                {
+                    selectedFile = file;
+                    break;
+                }
+            }
+
+            if (selectedFile == null)
+            {
+                alert("오디오 파일을 넣어 주세요");
+                return;
+            }
+            
+            if(isfileUpload === false)
+            {
+                updateFileToServer(selectedFile);
+                return isfileUpload = true;
+            }
+            else
+            {
+                alert('이미 파일이 올라가 있습니다');
+                return;
+            }
+    
+            
+
+            console.log(files);
         }); 
 
         ['dragenter', 'dragover'].forEach(eventName => {
@@ -209,7 +249,16 @@
         
             fileInput.files = dataTransfer.files;
 
-            updateFileToServer(selectedFile);
+             if(isfileUpload === false)
+            {
+                updateFileToServer(selectedFile);
+                return isfileUpload = true;
+            }
+            else
+            {
+                alert('이미 파일이 올라가 있습니다');
+                return;
+            }
 
             console.log(files);
         });

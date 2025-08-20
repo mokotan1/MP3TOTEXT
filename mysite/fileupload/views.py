@@ -20,9 +20,9 @@ class FileViewSet(viewsets.ModelViewSet):
 
         return_txt = whisper_model.transcribe(file_path, language = 'ko')
 
-        serializer.instance.transcirbed_txt = return_txt['text']
+        serializer.instance.transcribed_txt = return_txt['text']
 
-        serializer.save()
+        serializer.instance.save()
 
     
 

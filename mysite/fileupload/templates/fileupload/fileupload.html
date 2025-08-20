@@ -184,16 +184,9 @@
                 return;
             }
             
-            if(isfileUpload === false)
-            {
-                updateFileToServer(selectedFile);
-                return isfileUpload = true;
-            }
-            else
-            {
-                alert('이미 파일이 올라가 있습니다');
-                return;
-            }
+        
+            updateFileToServer(selectedFile);
+             
     
             
 

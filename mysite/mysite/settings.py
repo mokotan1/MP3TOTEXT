@@ -42,6 +42,15 @@ WHISPER_LANGUAGE = 'ko'
 
 WHISPER_DEVICE = 'cpu'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],  # Redis 서버 주소
+        },
+    }
+}
+
 
 # Application definition
 
@@ -55,6 +64,9 @@ INSTALLED_APPS = [
     'fileupload',
     'rest_framework',
     'myusers',
+    'channels',
+    'channels_redis',
+    'celery'
 ]
 
 MIDDLEWARE = [

@@ -8,4 +8,5 @@ router.register(r'files', views.FileViewSet, basename='file')
 urlpatterns = [
     path('', include(router.urls)),
     path('upload/', views.FileUploadCreateView.as_view(), name='fileupload_create'),
+    path('main/', views.MainView.as_view(), name='main'),  
 ]

@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     'myusers',
     'channels',
     'channels_redis',
-    'celery'
+    'celery',
 ]
 
 MIDDLEWARE = [

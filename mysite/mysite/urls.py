@@ -15,16 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from fileupload import views
-from django.views.generic import TemplateView
+
+router = DefaultRouter()
+router.register(r'files', views.FileViewSet, basename='file')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('fileupload.urls')),
-    path('main/', views.upload_file, name='main'),
+      path('main/', include('fileupload.urls')),
     path('accounts/', include('myusers.urls')),
 ]
 
